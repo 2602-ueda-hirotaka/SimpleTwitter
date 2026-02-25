@@ -15,53 +15,52 @@ import chapter6.beans.UserMessage;
 import chapter6.logging.InitApplication;
 import chapter6.service.MessageService;
 
-
 @WebServlet(urlPatterns = { "/index.jsp" })
 public class TopServlet extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
 
+	/**
+	* ロガーインスタンスの生成
+	*/
+	Logger log = Logger.getLogger("twitter");
 
-    /**
-    * ロガーインスタンスの生成
-    */
-    Logger log = Logger.getLogger("twitter");
+	/**
+	* デフォルトコンストラクタ
+	* アプリケーションの初期化を実施する。
+	*/
+	public TopServlet() {
+		InitApplication application = InitApplication.getInstance();
+		application.init();
 
-    /**
-    * デフォルトコンストラクタ
-    * アプリケーションの初期化を実施する。
-    */
-    public TopServlet() {
-        InitApplication application = InitApplication.getInstance();
-        application.init();
+	}
 
-    }
+	@Override
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws IOException, ServletException {
 
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws IOException, ServletException {
+		log.info(new Object() {
+		}.getClass().getEnclosingClass().getName() +
+				" : " + new Object() {
+				}.getClass().getEnclosingMethod().getName());
 
+		boolean isShowMessageForm = false;
+		User user = (User) request.getSession().getAttribute("loginUser");
+		if (user != null) {
+			isShowMessageForm = true;
+		}
+		//		実践問題②の修正前
+		//      List<UserMessage> messages = new MessageService().select();
 
-	  log.info(new Object(){}.getClass().getEnclosingClass().getName() +
-        " : " + new Object(){}.getClass().getEnclosingMethod().getName());
+		// 実践問題②の修正後
+		// request.getParameterで "user_id" を受け取る
+		String userId = request.getParameter("user_id");
 
-	  boolean isShowMessageForm = false;
-      User user = (User) request.getSession().getAttribute("loginUser");
-      if (user != null) {
-          isShowMessageForm = true;
-      }
-//		実践問題②の修正前
-//      List<UserMessage> messages = new MessageService().select();
-      
-      // 実践問題②の修正後
-      // request.getParameterで "user_id" を受け取る
-      String userId = request.getParameter("user_id");
-      
-      // 受け取った userId を selectメソッドの引数に渡す
-      List<UserMessage> messages = new MessageService().select(userId);
+		// 受け取った userId を selectメソッドの引数に渡す
+		List<UserMessage> messages = new MessageService().select(userId);
 
-      request.setAttribute("messages", messages);
-      request.setAttribute("isShowMessageForm", isShowMessageForm);
-        request.getRequestDispatcher("/top.jsp").forward(request, response);
-    }
+		request.setAttribute("messages", messages);
+		request.setAttribute("isShowMessageForm", isShowMessageForm);
+		request.getRequestDispatcher("/top.jsp").forward(request, response);
+	}
 }
