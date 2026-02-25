@@ -125,6 +125,15 @@ public class SettingServlet extends HttpServlet {
 			errorMessages.add("アカウント名は20文字以下で入力してください");
 		}
 
+		// 実践課題③ 設定画面用のアカウント重複チェック
+		if (!StringUtils.isEmpty(account)) {
+			UserService userService = new UserService();
+			User existingUser = userService.select(account);
+
+			if (existingUser != null && existingUser.getId() != user.getId()) {
+				errorMessages.add("そのアカウント名はすでに登録されています");
+			}
+		}
 		if (StringUtils.isEmpty(email)) {
 			errorMessages.add("メールアドレスを入力してください");
 		} else if (!StringUtils.isEmpty(email) && (50 < email.length())) {
