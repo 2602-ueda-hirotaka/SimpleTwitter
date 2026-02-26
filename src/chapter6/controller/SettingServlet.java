@@ -126,14 +126,12 @@ public class SettingServlet extends HttpServlet {
 		}
 
 		// 実践課題③ 設定画面用のアカウント重複チェック
-		if (!StringUtils.isEmpty(account)) {
-			UserService userService = new UserService();
-			User existingUser = userService.select(account);
+		User existingUser = new UserService().select(account);
 
-			if (existingUser != null && existingUser.getId() != user.getId()) {
-				errorMessages.add("そのアカウント名はすでに登録されています");
-			}
+		if (existingUser != null && existingUser.getId() != user.getId()) {
+			errorMessages.add("そのアカウント名はすでに登録されています");
 		}
+
 		if (StringUtils.isEmpty(email)) {
 			errorMessages.add("メールアドレスを入力してください");
 		} else if (!StringUtils.isEmpty(email) && (50 < email.length())) {

@@ -72,13 +72,28 @@
 						</a> <!----------------> </span> <span class="name"><c:out
 								value="${message.name}" /></span>
 					</div>
-					<div class="text">
-						<c:out value="${message.text}" />
-					</div>
+					<!-- ７６行目を一行で書かかないと文章に余計な空白が入る -->
+					<div class="text" style="white-space: pre-wrap;"><c:out value="${message.text}" /></div>
 					<div class="date">
 						<fmt:formatDate value="${message.createdDate}"
 							pattern="yyyy/MM/dd HH:mm:ss" />
 					</div>
+					<!-- 追加機能つぶやきの削除：削除ボタン 自分自身のつぶやきの場合のみ表示-->
+					<c:if test="${message.userId == loginUser.id}">
+						<div class="message-actions">
+							<!-- 編集ボタン -->
+							<form action="editMessage" method="get" style="display: inline;">
+								<input type="hidden" name="message_id" value="${message.id}">
+								<input type="submit" value="編集">
+							</form>
+							<form action="deleteMessage" method="post"
+								onsubmit="return confirm('本当に削除しますか？');">
+								<input type="hidden" name="message_id" value="${message.id}">
+								<input type="submit" value="削除">
+							</form>
+						</div>
+					</c:if>
+					<!------------------------------------------------------------------------->
 				</div>
 			</c:forEach>
 		</div>

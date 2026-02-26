@@ -4,6 +4,7 @@ import static chapter6.utils.CloseableUtil.*;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -65,4 +66,88 @@ public class MessageDao {
 			close(ps);
 		}
 	}
+
+	// 仕様追加：つぶやきの編集 編集画面に表示するために、メッセージを1件だけ取得するメソッド
+	public Message select(Connection connection, int id) {
+		log.info(new Object() {
+		}.getClass().getEnclosingClass().getName() +
+				" : " + new Object() {
+				}.getClass().getEnclosingMethod().getName());
+
+		PreparedStatement ps = null;
+		try {
+			String sql = "SELECT * FROM messages WHERE id = ?";
+			ps = connection.prepareStatement(sql);
+			ps.setInt(1, id);
+			ResultSet rs = ps.executeQuery();
+
+			if (rs.next()) {
+				Message message = new Message();
+				message.setId(rs.getInt("id"));
+				message.setUserId(rs.getInt("user_id"));
+				message.setText(rs.getString("text"));
+				message.setCreatedDate(rs.getTimestamp("created_date"));
+				message.setUpdatedDate(rs.getTimestamp("updated_date"));
+				return message;
+			} else {
+				return null;
+			}
+		} catch (SQLException e) {
+			log.log(Level.SEVERE, new Object() {
+			}.getClass().getEnclosingClass().getName() + " : " + e.toString(), e);
+			throw new SQLRuntimeException(e);
+		} finally {
+			close(ps);
+		}
+	}
+
+	// 仕様追加：つぶやきの編集 編集されたつぶやき内容でデータベースを更新するメソッド
+	public void update(Connection connection, Message message) {
+		log.info(new Object() {
+		}.getClass().getEnclosingClass().getName() +
+				" : " + new Object() {
+				}.getClass().getEnclosingMethod().getName());
+
+		PreparedStatement ps = null;
+		try {
+			String sql = "UPDATE messages SET text = ?, updated_date = CURRENT_TIMESTAMP WHERE id = ?";
+			ps = connection.prepareStatement(sql);
+			ps.setString(1, message.getText());
+			ps.setInt(2, message.getId());
+			ps.executeUpdate();
+		} catch (SQLException e) {
+			log.log(Level.SEVERE, new Object() {
+			}.getClass().getEnclosingClass().getName() + " : " + e.toString(), e);
+			throw new SQLRuntimeException(e);
+		} finally {
+			close(ps);
+		}
+	}
+	//==========================================================================
+
+	//仕様追加：つぶやきの削除 databaseからつぶやきを削除
+	public void delete(Connection connection, int id) {
+		log.info(new Object() {
+		}.getClass().getEnclosingClass().getName() +
+				" : " + new Object() {
+				}.getClass().getEnclosingMethod().getName());
+
+		PreparedStatement ps = null;
+		try {
+			String sql = "DELETE FROM messages WHERE id = ?";
+
+			ps = connection.prepareStatement(sql);
+			ps.setInt(1, id);
+			ps.executeUpdate();
+
+		} catch (SQLException e) {
+			log.log(Level.SEVERE, new Object() {
+			}.getClass().getEnclosingClass().getName() + " : " + e.toString(), e);
+			throw new SQLRuntimeException(e);
+		} finally {
+			close(ps);
+		}
+	}
+	//===================================================
+
 }
