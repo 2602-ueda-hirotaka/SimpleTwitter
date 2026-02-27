@@ -39,23 +39,15 @@ public class EditMessageServlet extends HttpServlet {
 
 		// URLパラメータを文字列として受け取る
 		String messageIdStr = request.getParameter("message_id");
-		int messageId = 0;
 
-		try {
+		Message message = null;
+		//if文で文字列をチェックする。数字か空白あるかをチェックして、47、59行目に移る
+		if(messageIdStr != null && !messageIdStr.isEmpty() && messageIdStr.matches("^[1-9]+$")) {
 			// 文字列を数値に変換してみる
-			messageId = Integer.parseInt(messageIdStr);
-		} catch (NumberFormatException e) {
-			// 数字以外が入力されて変換エラーになった場合の処理
-			List<String> errorMessages = new ArrayList<String>();
-			errorMessages.add("不正なパラメータが入力されました");
-
-			// エラーメッセージをセッションにセットしてトップ画面へリダイレクト
-			request.getSession().setAttribute("errorMessages", errorMessages);
-			response.sendRedirect("./");
-			return;
+			int messageId = Integer.parseInt(messageIdStr);
+			// DBから最新の情報を取得する
+			message = new MessageService().select(messageId);
 		}
-		// DBから最新の情報を取得する
-		Message message = new MessageService().select(messageId);
 
 		// データが存在しなかった場合のエラー処理
 		if (message == null) {
@@ -69,7 +61,7 @@ public class EditMessageServlet extends HttpServlet {
 		}
 		// 取得したメッセージを画面に渡して表示
 		request.setAttribute("message", message);
-		request.getRequestDispatcher("editMessage.jsp").forward(request, response);
+		request.getRequestDispatcher("edit.jsp").forward(request, response);
 	}
 
 	// 更新ボタンが押された時（DBを更新する処理）
@@ -85,16 +77,18 @@ public class EditMessageServlet extends HttpServlet {
 
 		int messageId = Integer.parseInt(request.getParameter("message_id"));
 		String text = request.getParameter("text");
-
-		// DBから元のメッセージを取得し、新しいテキストをセットする
-		Message message = new MessageService().select(messageId);
+		Message message =new Message();
 		message.setText(text);
+		message.setId(messageId);
 
 		// バリデーションチェック（空欄や140文字オーバーでないか）
 		if (!isValid(text, errorMessages)) {
+			// DBから元のメッセージを取得し、新しいテキストをセットする
+			message = new MessageService().select(messageId);
+			message.setText(text);
 			request.setAttribute("errorMessages", errorMessages);
 			request.setAttribute("message", message);
-			request.getRequestDispatcher("editMessage.jsp").forward(request, response);
+			request.getRequestDispatcher("edit.jsp").forward(request, response);
 			return;
 		}
 

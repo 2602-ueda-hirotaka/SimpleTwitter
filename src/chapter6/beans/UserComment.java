@@ -2,20 +2,17 @@ package chapter6.beans;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
 
-public class UserMessage implements Serializable {
-
+public class UserComment implements Serializable {
 	private int id;
+	private int messageId;
+	private int userId;
 	private String account;
 	private String name;
-	private int userId;
 	private String text;
 	private Date createdDate;
-	private List<UserComment> comments;
 
-	// getter/setterは省略されているので、自分で記述しましょう。
-
+	// --- id ---
 	public int getId() {
 		return id;
 	}
@@ -24,22 +21,16 @@ public class UserMessage implements Serializable {
 		this.id = id;
 	}
 
-	public String getAccount() {
-		return account;
+	// --- messageId ---
+	public int getMessageId() {
+		return messageId;
 	}
 
-	public void setAccount(String account) {
-		this.account = account;
+	public void setMessageId(int messageId) {
+		this.messageId = messageId;
 	}
 
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
+	// --- userId ---
 	public int getUserId() {
 		return userId;
 	}
@@ -48,6 +39,25 @@ public class UserMessage implements Serializable {
 		this.userId = userId;
 	}
 
+	// --- account ---
+	public String getAccount() {
+		return account;
+	}
+
+	public void setAccount(String account) {
+		this.account = account;
+	}
+
+	// --- name ---
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	// --- text ---
 	public String getText() {
 		return text;
 	}
@@ -56,6 +66,7 @@ public class UserMessage implements Serializable {
 		this.text = text;
 	}
 
+	// --- createdDate ---
 	public Date getCreatedDate() {
 		return createdDate;
 	}
@@ -63,11 +74,4 @@ public class UserMessage implements Serializable {
 	public void setCreatedDate(Date createdDate) {
 		this.createdDate = createdDate;
 	}
-	
-    public List<UserComment> getComments() {
-        return comments;
-    }
-    public void setComments(List<UserComment> comments) {
-        this.comments = comments;
-    }
 }

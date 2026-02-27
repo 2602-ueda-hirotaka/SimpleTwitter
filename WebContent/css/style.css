@@ -102,7 +102,7 @@ a.profile .account {
 	font: small-caption;
 }
 
-.message .date {
+.message .date, .comment .date{
 	font-weight: lighter;
 	color: gray;
 	font: small-caption;

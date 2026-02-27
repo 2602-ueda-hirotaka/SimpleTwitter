@@ -21,7 +21,7 @@
 			</div>
 		</c:if>
 
-		<form action="editMessage" method="post">
+		<form action="edit" method="post">
 			<!-- どのつぶやきを更新するかをServletに伝えるための隠し項目 -->
 			<input name="message_id" value="${message.id}" type="hidden" /> <label
 				for="text">いま、どうしてる？</label><br />

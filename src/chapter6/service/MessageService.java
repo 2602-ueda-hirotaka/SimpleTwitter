@@ -81,8 +81,8 @@ public class MessageService {
 			}
 
 			List<UserMessage> messages = new UserMessageDao().select(connection, id, LIMIT_NUM);
-			commit(connection);
 
+			commit(connection);
 			return messages;
 		} catch (RuntimeException e) {
 			rollback(connection);
