@@ -17,7 +17,7 @@ import chapter6.beans.Message;
 import chapter6.logging.InitApplication;
 import chapter6.service.MessageService;
 
-@WebServlet(urlPatterns = { "/editMessage" })
+@WebServlet(urlPatterns = { "/edit" })
 public class EditMessageServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 

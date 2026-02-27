@@ -82,7 +82,7 @@
 					<c:if test="${message.userId == loginUser.id}">
 						<div class="message-actions">
 							<!-- 編集ボタン -->
-							<form action="editMessage" method="get" style="display: inline;">
+							<form action="edit" method="get" style="display: inline;">
 								<input type="hidden" name="message_id" value="${message.id}">
 								<input type="submit" value="編集">
 							</form>
