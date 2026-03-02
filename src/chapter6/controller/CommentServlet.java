@@ -49,7 +49,7 @@ public class CommentServlet extends HttpServlet {
 
     private boolean isValid(String text, List<String> errorMessages) {
         if (StringUtils.isBlank(text)) {
-            errorMessages.add("返信を入力してください");
+            errorMessages.add("メッセージを入力してください");
         } else if (140 < text.length()) {
             errorMessages.add("140文字以下で入力してください");
         }

@@ -60,7 +60,7 @@ public class MessageService {
 		}
 	}
 
-	public List<UserMessage> select(String userId) {
+	public List<UserMessage> select(String userId, String start, String end) {
 
 		log.info(new Object() {
 		}.getClass().getEnclosingClass().getName() +
@@ -79,8 +79,28 @@ public class MessageService {
 			if (!StringUtils.isEmpty(userId)) {
 				id = Integer.parseInt(userId);
 			}
+			// 絞り込み機能：日付の判定とデフォルト値の設定
+			String startDateTime;
+			if (!StringUtils.isEmpty(start)) {
+				// 入力されていたら 00:00:00 を結合
+				startDateTime = start + " 00:00:00";
+			} else {
+				// デフォルト値
+				startDateTime = "2020-01-01 00:00:00";
+			}
 
-			List<UserMessage> messages = new UserMessageDao().select(connection, id, LIMIT_NUM);
+			String endDateTime;
+			if (!StringUtils.isEmpty(end)) {
+				// 入力されていたら 23:59:59 を結合
+				endDateTime = end + " 23:59:59";
+			} else {
+				// Javaで現在の日時を取得してデフォルト値にする
+				java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+				endDateTime = sdf.format(new java.util.Date());
+			}
+
+			List<UserMessage> messages = new UserMessageDao().select(connection, id, startDateTime, endDateTime,
+					LIMIT_NUM);
 
 			commit(connection);
 			return messages;

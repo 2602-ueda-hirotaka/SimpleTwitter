@@ -39,7 +39,14 @@
 				</div>
 			</c:if>
 		</div>
-
+		<!-- 絞り込み機能-->
+		<div class="filter-area" style="margin-bottom: 20px;">
+			<form action="./" method="get">
+				<input type="date" name="start" value="${param.start}"> ～ <input type="date"
+					name="end" value="${param.end}"> <input type="submit" value="絞込">
+			</form>
+		</div>
+		<!------------------>
 		<c:if test="${ not empty errorMessages }">
 			<div class="errorMessages">
 				<ul>
@@ -72,8 +79,8 @@
 						</span> <span class="name"><c:out value="${message.name}" /></span>
 					</div>
 					<div class="text">
-					<!-- 改行を入れない------------------------------>
-						<pre><c:out value="${message.text}" /></pre>
+						<!-- 改行を入れない------------------------------>
+						<pre style="white-space: pre-wrap; word-break: break-all;"><c:out value="${message.text}" /></pre>
 					</div>
 					<div class="date">
 						<fmt:formatDate value="${message.createdDate}"
@@ -104,12 +111,12 @@
 						<c:if test="${comment.messageId == message.id}">
 							<div class="comment">
 								<div class="account-name">
-								<span class="account"><c:out value="${comment.account}" /></span>
-								<span class="name"><c:out value="${comment.name}" /></span>
+									<span class="account"><c:out value="${comment.account}" /></span>
+									<span class="name"><c:out value="${comment.name}" /></span>
 								</div>
 								<div class="text">
-								<!-- 改行を入れない------------------------------>
-									<pre><c:out value="${comment.text}" /></pre>
+									<!-- 改行を入れない------------------------------>
+									<pre style="white-space: pre-wrap; word-break: break-all;"><c:out value="${comment.text}" /></pre>
 								</div>
 								<div class="date">
 									<fmt:formatDate value="${comment.createdDate}"

@@ -32,7 +32,8 @@ public class UserMessageDao {
 
 	}
 
-	public List<UserMessage> select(Connection connection, Integer id, int num) {
+	public List<UserMessage> select(Connection connection, Integer id, String startDateTime, String endDateTime,
+			int num) {
 
 		log.info(new Object() {
 		}.getClass().getEnclosingClass().getName() +
@@ -52,19 +53,25 @@ public class UserMessageDao {
 			sql.append("FROM messages ");
 			sql.append("INNER JOIN users ");
 			sql.append("ON messages.user_id = users.id ");
+			//絞り込み機能：日付絞り込み条件
+			sql.append("WHERE messages.created_date >= ? AND messages.created_date <= ? ");
 
 			//実践問題②
-			// idが指定されている場合のみ、WHERE句を追加する
+			// idが指定されている場合のみ、ANDでつなぐ
 			if (id != null) {
-				sql.append("WHERE messages.user_id = ? ");
+				sql.append("AND messages.user_id = ? ");
 			}
 			sql.append("ORDER BY created_date DESC limit " + num);
 
 			ps = connection.prepareStatement(sql.toString());
 
+			// 絞り込み機能：日付のパラメータをセット
+			ps.setString(1, startDateTime);
+			ps.setString(2, endDateTime);
+
 			// idが指定されている場合のみ、? に id の値をセットする
 			if (id != null) {
-				ps.setInt(1, id);
+				ps.setInt(3, id);
 			}
 
 			ResultSet rs = ps.executeQuery();

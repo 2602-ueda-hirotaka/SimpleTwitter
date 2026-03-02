@@ -20,6 +20,8 @@
 					</c:forEach>
 				</ul>
 			</div>
+			<!-- 打鍵テスト -->
+			<c:remove var="errorMessages" scope="session" />
 		</c:if>
 
 		<form action="login" method="post">

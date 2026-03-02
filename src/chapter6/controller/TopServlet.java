@@ -56,8 +56,13 @@ public class TopServlet extends HttpServlet {
 		// request.getParameterで "user_id" を受け取る
 		String userId = request.getParameter("user_id");
 
+		//絞り込み機能
+		//画面から送信された start と end の値を受け取り、Serviceに渡す準備をする
+		String start = request.getParameter("start");
+		String end = request.getParameter("end");
+
 		// 受け取った userId を selectメソッドの引数に渡す
-		List<UserMessage> messages = new MessageService().select(userId);
+		List<UserMessage> messages = new MessageService().select(userId, start, end);
 		request.setAttribute("messages", messages);
 		// ▼▼▼ ここから追加：全返信リストを取得してJSPに渡す ▼▼▼
 		List<UserComment> comments = new CommentService().selectAll();
