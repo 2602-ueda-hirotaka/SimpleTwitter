@@ -42,8 +42,8 @@
 		<!-- 絞り込み機能-->
 		<div class="filter-area" style="margin-bottom: 20px;">
 			<form action="./" method="get">
-				<input type="date" name="start" value="${param.start}"> ～ <input type="date"
-					name="end" value="${param.end}"> <input type="submit" value="絞込">
+				<input type="date" name="start" value="${start}"> ～ <input type="date"
+					name="end" value="${end}"> <input type="submit" value="絞込">
 			</form>
 		</div>
 		<!------------------>
@@ -132,9 +132,8 @@
 
 							<!-- 要件: 紐づいているつぶやきのIDはinputタグのhidden属性を使ってServletに送ること -->
 							<input type="hidden" name="message_id" value="${message.id}" />
-
-							<textarea name="text" rows="2" cols="40"></textarea>
-							<br /> <input type="submit" value="返信" />
+							<textarea name="text" rows="2" cols="40" class="tweet-box"></textarea>
+							<br /> <input type="submit" value="返信" />（140文字まで）
 						</form>
 					</c:if>
 				</div>

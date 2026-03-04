@@ -32,7 +32,7 @@ public class UserMessageDao {
 
 	}
 
-	public List<UserMessage> select(Connection connection, Integer id, String startDateTime, String endDateTime,
+	public List<UserMessage> select(Connection connection, Integer id, String start, String end,
 			int num) {
 
 		log.info(new Object() {
@@ -54,7 +54,7 @@ public class UserMessageDao {
 			sql.append("INNER JOIN users ");
 			sql.append("ON messages.user_id = users.id ");
 			//絞り込み機能：日付絞り込み条件
-			sql.append("WHERE messages.created_date >= ? AND messages.created_date <= ? ");
+			sql.append("WHERE messages.created_date >= ? AND messages.created_date <= ? ");//レビュー btween構文を使う
 
 			//実践問題②
 			// idが指定されている場合のみ、ANDでつなぐ
@@ -66,8 +66,8 @@ public class UserMessageDao {
 			ps = connection.prepareStatement(sql.toString());
 
 			// 絞り込み機能：日付のパラメータをセット
-			ps.setString(1, startDateTime);
-			ps.setString(2, endDateTime);
+			ps.setString(1, start);
+			ps.setString(2, end);
 
 			// idが指定されている場合のみ、? に id の値をセットする
 			if (id != null) {
@@ -86,7 +86,7 @@ public class UserMessageDao {
 		}
 	}
 
-	private List<UserMessage> toUserMessages(ResultSet rs) throws SQLException {
+	private List<UserMessage> toUserMessages(ResultSet rs) throws SQLException {//メッセージDAOと書き方を合わせる
 
 		log.info(new Object() {
 		}.getClass().getEnclosingClass().getName() +

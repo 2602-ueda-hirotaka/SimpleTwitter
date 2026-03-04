@@ -14,8 +14,8 @@ import chapter6.beans.User;
 import chapter6.beans.UserComment;
 import chapter6.beans.UserMessage;
 import chapter6.logging.InitApplication;
-import chapter6.service.CommentService;
 import chapter6.service.MessageService;
+import chapter6.service.UserCommentService;
 
 @WebServlet(urlPatterns = { "/index.jsp" })
 public class TopServlet extends HttpServlet {
@@ -65,9 +65,10 @@ public class TopServlet extends HttpServlet {
 		List<UserMessage> messages = new MessageService().select(userId, start, end);
 		request.setAttribute("messages", messages);
 		// ▼▼▼ ここから追加：全返信リストを取得してJSPに渡す ▼▼▼
-		List<UserComment> comments = new CommentService().selectAll();
+		List<UserComment> comments = new UserCommentService().select();
 		request.setAttribute("comments", comments);
-
+		request.setAttribute("start", start);
+		request.setAttribute("end", end);
 		request.setAttribute("isShowMessageForm", isShowMessageForm);
 		request.getRequestDispatcher("/top.jsp").forward(request, response);
 	}

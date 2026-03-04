@@ -20,42 +20,42 @@ import chapter6.service.CommentService;
 // 要件: 呼び出す際のURLは「/comment」とすること
 @WebServlet(urlPatterns = { "/comment" })
 public class CommentServlet extends HttpServlet {
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws IOException, ServletException {
-        HttpSession session = request.getSession();
-        List<String> errorMessages = new ArrayList<String>();
+	@Override
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws IOException, ServletException {
+		HttpSession session = request.getSession();
+		List<String> errorMessages = new ArrayList<String>();
 
-        String text = request.getParameter("text");
-        // 要件: 紐づいているつぶやきのIDを受け取る
-        int messageId = Integer.parseInt(request.getParameter("message_id"));
+		String text = request.getParameter("text");
+		// 要件: 紐づいているつぶやきのIDを受け取る
+		int messageId = Integer.parseInt(request.getParameter("message_id"));
 
-        if (!isValid(text, errorMessages)) {
-            session.setAttribute("errorMessages", errorMessages);
-            response.sendRedirect("./");
-            return;
-        }
+		if (!isValid(text, errorMessages)) {
+			session.setAttribute("errorMessages", errorMessages);
+			response.sendRedirect("./");
+			return;
+		}
 
-        User user = (User) session.getAttribute("loginUser");
+		User user = (User) session.getAttribute("loginUser");
 
-        // 返信を登録するServiceを呼び出す
-        new CommentService().insert(messageId, user.getId(), text);
+		// 返信を登録するServiceを呼び出す
+		new CommentService().insert(messageId, user.getId(), text);
 
-        // 要件: 返信を登録してトップ画面を再表示する
-        response.sendRedirect("./");
-    }
+		// 要件: 返信を登録してトップ画面を再表示する
+		response.sendRedirect("./");
+	}
 
-    private boolean isValid(String text, List<String> errorMessages) {
-        if (StringUtils.isBlank(text)) {
-            errorMessages.add("メッセージを入力してください");
-        } else if (140 < text.length()) {
-            errorMessages.add("140文字以下で入力してください");
-        }
-        if (errorMessages.size() != 0) {
-            return false;
-        }
-        return true;
-    }
+	private boolean isValid(String text, List<String> errorMessages) {
+		if (StringUtils.isBlank(text)) {
+			errorMessages.add("メッセージを入力してください");
+		} else if (140 < text.length()) {
+			errorMessages.add("140文字以下で入力してください");
+		}
+		if (errorMessages.size() != 0) {
+			return false;
+		}
+		return true;
+	}
 }

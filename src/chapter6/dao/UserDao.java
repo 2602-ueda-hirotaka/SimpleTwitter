@@ -90,9 +90,15 @@ public class UserDao {
 
 		PreparedStatement ps = null;
 		try {
-			String sql = "SELECT * FROM users WHERE (account = ? OR email = ?) AND password = ?";
+			// ▼ StringBuilderを使ってSQLを構築
+			StringBuilder sql = new StringBuilder();
+			sql.append("SELECT * ");
+			sql.append("FROM users ");
+			sql.append("WHERE (account = ? OR email = ?) ");
+			sql.append("AND password = ?");
 
-			ps = connection.prepareStatement(sql);
+			// ▼ sql.toString() で文字列に変換して渡す
+			ps = connection.prepareStatement(sql.toString());
 
 			ps.setString(1, accountOrEmail);
 			ps.setString(2, accountOrEmail);

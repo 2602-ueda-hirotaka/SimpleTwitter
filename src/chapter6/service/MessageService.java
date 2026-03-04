@@ -4,6 +4,7 @@ import static chapter6.utils.CloseableUtil.*;
 import static chapter6.utils.DBUtil.*;
 
 import java.sql.Connection;
+import java.text.DateFormat;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -80,26 +81,24 @@ public class MessageService {
 				id = Integer.parseInt(userId);
 			}
 			// 絞り込み機能：日付の判定とデフォルト値の設定
-			String startDateTime;
-			if (!StringUtils.isEmpty(start)) {
+			if (!StringUtils.isBlank(start)) {
 				// 入力されていたら 00:00:00 を結合
-				startDateTime = start + " 00:00:00";
+				start += " 00:00:00";
 			} else {
 				// デフォルト値
-				startDateTime = "2020-01-01 00:00:00";
+				start = "2020-01-01 00:00:00";
 			}
 
-			String endDateTime;
-			if (!StringUtils.isEmpty(end)) {
+			if (!StringUtils.isBlank(end)) {
 				// 入力されていたら 23:59:59 を結合
-				endDateTime = end + " 23:59:59";
+				end += " 23:59:59";
 			} else {
 				// Javaで現在の日時を取得してデフォルト値にする
-				java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-				endDateTime = sdf.format(new java.util.Date());
+				DateFormat df = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+				end = df.format(new java.util.Date());
 			}
 
-			List<UserMessage> messages = new UserMessageDao().select(connection, id, startDateTime, endDateTime,
+			List<UserMessage> messages = new UserMessageDao().select(connection, id, start, end,
 					LIMIT_NUM);
 
 			commit(connection);

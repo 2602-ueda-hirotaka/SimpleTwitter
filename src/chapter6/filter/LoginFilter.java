@@ -34,20 +34,18 @@ public class LoginFilter implements Filter {
 		User loginUser = (User) session.getAttribute("loginUser");
 
 		// 2. ログインしているか判定し、遷移する画面を分岐する
-		if (loginUser != null) {
-			// 【ログインしている場合】
-			// chain.doFilter で リクエストのあった画面（/setting や /edit）にそのまま遷移
-			chain.doFilter(request, response);
-
-		} else {
-			// 【ログインしていない場合】
-			// エラーメッセージを用意してセッションに格納
+		if (loginUser == null) {
+			// 【ログインしていない場合】（異常系）
 			List<String> errorMessages = new ArrayList<String>();
 			errorMessages.add("ログインしてください");
 			session.setAttribute("errorMessages", errorMessages);
 
-			// response.sendRedirect で ログイン画面に遷移
-			httpResponse.sendRedirect("login");
+			httpResponse.sendRedirect("./login");
+
+		} else {
+			// 【ログインしている場合】（正常系）
+			// chain.doFilter で リクエストのあった画面にそのまま遷移
+			chain.doFilter(request, response);
 		}
 	}
 
