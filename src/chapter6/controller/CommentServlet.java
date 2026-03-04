@@ -13,6 +13,7 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang.StringUtils;
 
+import chapter6.beans.Comment;
 import chapter6.beans.User;
 // ※DB接続やトランザクション処理を行うCommentServiceを作成しておく必要があります（MessageServiceを参考に作成してください）
 import chapter6.service.CommentService;
@@ -41,7 +42,13 @@ public class CommentServlet extends HttpServlet {
 		User user = (User) session.getAttribute("loginUser");
 
 		// 返信を登録するServiceを呼び出す
-		new CommentService().insert(messageId, user.getId(), text);
+		Comment comment = new Comment();
+		comment.setText(text);
+		comment.setMessageId(messageId);
+		comment.setUserId(user.getId());
+
+		// 返信を登録するServiceを呼び出す（引数にまとめたBeanを渡す）
+		new CommentService().insert(comment);
 
 		// 要件: 返信を登録してトップ画面を再表示する
 		response.sendRedirect("./");

@@ -6,11 +6,12 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
+import chapter6.beans.Comment;
 import chapter6.exception.SQLRuntimeException;
 
 public class CommentDao {
 	// 【登録処理】
-	public void insert(Connection connection, int messageId, int userId, String text) {
+	public void insert(Connection connection, Comment comment) {
 		PreparedStatement ps = null;
 		try {
 			// ▼ StringBuilderを使ってSQLを構築
@@ -31,9 +32,9 @@ public class CommentDao {
 
 			// ▼ sql.toString() で文字列に変換して渡す
 			ps = connection.prepareStatement(sql.toString());
-			ps.setInt(1, messageId);
-			ps.setInt(2, userId);
-			ps.setString(3, text);
+			ps.setInt(1, comment.getMessageId());
+			ps.setInt(2, comment.getUserId());
+			ps.setString(3, comment.getText());
 			ps.executeUpdate();
 		} catch (SQLException e) {
 			throw new SQLRuntimeException(e);

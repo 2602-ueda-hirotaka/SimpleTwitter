@@ -54,7 +54,7 @@ public class UserMessageDao {
 			sql.append("INNER JOIN users ");
 			sql.append("ON messages.user_id = users.id ");
 			//絞り込み機能：日付絞り込み条件
-			sql.append("WHERE messages.created_date >= ? AND messages.created_date <= ? ");//レビュー btween構文を使う
+			sql.append("WHERE messages.created_date BETWEEN ? AND ? ");
 
 			//実践問題②
 			// idが指定されている場合のみ、ANDでつなぐ

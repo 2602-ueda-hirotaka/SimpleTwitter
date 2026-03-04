@@ -41,12 +41,13 @@ public class LoginFilter implements Filter {
 			session.setAttribute("errorMessages", errorMessages);
 
 			httpResponse.sendRedirect("./login");
+			return;
 
-		} else {
-			// 【ログインしている場合】（正常系）
-			// chain.doFilter で リクエストのあった画面にそのまま遷移
-			chain.doFilter(request, response);
 		}
+		// 【ログインしている場合】（正常系）
+		// chain.doFilter で リクエストのあった画面にそのまま遷移
+		chain.doFilter(request, response);
+
 	}
 
 	@Override
